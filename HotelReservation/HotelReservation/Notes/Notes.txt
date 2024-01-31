@@ -1,0 +1,35 @@
+//IUnitOfWorkFactory factory = 
+            /*
+            using (var uow = factory.createuow())
+            {
+                await _guestrepository.createasync(uow, guest);
+
+
+                await _roomrepository.updateroom(uow, new room());
+
+                uow.savechanges();
+            }
+            */
+
+UOW => Maneira de "atomizar" interações com a base de dado e prevenir conflitos, mudanças na base de dados sao "controladas" por um UOW (Unit of Work)
+UOW Arquitetura => Em vez de criar os repositorio na UOW passa-los no construtor e adicionalos como um Scoped Service no porgram.cs , mesmo resultado (provavelmente?),
+mas mais limpo assumo que seja também mais resitente a errors
+
+
+BaseRepository => Ter um base repository que implementa de forma generica as açoes mais basicas de um repositorio (CRUD),
+ajuda a não ter codigo repetido, todos os outros repositorios vão herdar os metodos desta e depois vão herdar os seu métodos
+mais especificos das suas Interfaces 
+                                            
+                                                            ::
+                                                            ::
+                                                            ::
+                                                            vv
+                                        
+                                                            (herda)
+                            IBaseRepo (interface)     <==================    IEntityRepo (interface) 
+                                      :                                               :
+                                      v                   (herda)                     v
+                            BaseRepo (implemntação)   <==================    BaseRepo (implemntação)
+                            |                     |                         |  Metodos epscificos  |
+                            |    CRUD Methods     |                         |     da entidade      |
+                            |_____________________|                         |______________________|
